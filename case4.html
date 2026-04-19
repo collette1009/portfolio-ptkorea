@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case 4. 장바구니 주문 오류 Fail-soft UX 설계 — 이탈 → 흐름 이어가기 | 오희은 포트폴리오</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --white: #FFFFFF; --bg-soft: #F7F7F8; --bg-card: #F3F3F4;
+      --border: #E5E5E6; --text-1: #141416; --text-2: #50505A; --text-3: #909098;
+      --charcoal: #282D32; --charcoal-2: #1A1E21; --charcoal-a: rgba(40,45,50,0.07);
+      --sh-md: 0 4px 20px rgba(0,0,0,0.09); --r: 10px; --r-sm: 6px;
+      --ease: cubic-bezier(.4,0,.2,1); --t: 0.22s;
+    }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--text-1); background: var(--white); -webkit-font-smoothing: antialiased; line-height: 1.7; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 28px; }
+    header { position: sticky; top: 0; z-index: 200; background: rgba(255,255,255,0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid transparent; transition: border-color var(--t) var(--ease); }
+    header.on { border-bottom-color: var(--border); }
+    .h-inner { max-width: 980px; margin: 0 auto; padding: 0 28px; height: 62px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 16px; font-weight: 800; color: var(--charcoal); text-decoration: none; letter-spacing: -0.02em; }
+    nav { display: flex; gap: 30px; }
+    nav a { font-size: 14px; font-weight: 500; color: var(--text-2); text-decoration: none; transition: color var(--t); }
+    nav a:hover { color: var(--charcoal); }
+    .nav-toggle { display: none; width: 36px; height: 36px; border: none; background: none; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
+    .nav-toggle span { display: block; width: 20px; height: 2px; background: var(--charcoal); border-radius: 2px; }
+    @media (max-width: 800px) {
+      .nav-toggle { display: flex; }
+      nav { display: none; position: absolute; top: 62px; left: 0; right: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(16px); flex-direction: column; gap: 0; border-bottom: 1px solid var(--border); padding: 8px 0; }
+      nav.open { display: flex; }
+      nav a { padding: 14px 28px; font-size: 15px; }
+    }
+    .case-hero { padding: 72px 0 56px; border-bottom: 1px solid var(--border); }
+    .case-hero-nav { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-2); text-decoration: none; margin-bottom: 32px; transition: color var(--t); }
+    .case-hero-nav:hover { color: var(--charcoal); }
+    .case-hero-nav svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .case-hero-title { font-size: clamp(26px, 4vw, 36px); font-weight: 800; letter-spacing: -0.03em; color: var(--charcoal); line-height: 1.2; margin-bottom: 20px; max-width: 720px; }
+    .case-hero-summary { font-size: 16px; color: var(--text-2); line-height: 1.85; max-width: 720px; padding: 20px 24px; background: var(--bg-soft); border-left: 3px solid var(--charcoal); border-radius: var(--r-sm); margin-bottom: 24px; }
+    .case-hero-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 28px; }
+    .meta-chip { background: var(--charcoal-a); padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 600; color: var(--charcoal); }
+    .sec { padding: 60px 0; }
+    .sec-alt { background: var(--bg-soft); }
+    .sec-title { font-size: clamp(22px, 3vw, 28px); font-weight: 700; letter-spacing: -0.025em; color: var(--charcoal); line-height: 1.3; margin-bottom: 32px; }
+    .problem-list { display: flex; flex-direction: column; gap: 16px; }
+    .problem-item { padding: 22px 26px; background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); font-size: 15px; color: var(--text-2); line-height: 1.8; }
+    .problem-item strong { color: var(--text-1); font-weight: 600; }
+    .problem-item .problem-title { font-size: 14px; font-weight: 700; color: var(--text-1); margin-bottom: 6px; }
+    .did-list { display: flex; flex-direction: column; gap: 16px; }
+    .did-item { padding: 26px 28px; background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); }
+    .did-number { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--charcoal); margin-bottom: 10px; background: var(--charcoal-a); padding: 3px 12px; border-radius: 6px; }
+    .did-title { font-size: 16px; font-weight: 700; color: var(--text-1); margin-bottom: 8px; letter-spacing: -0.01em; }
+    .did-desc { font-size: 15px; color: var(--text-2); line-height: 1.8; }
+    .did-desc strong { color: var(--text-1); font-weight: 600; }
+    .outcome-list { display: flex; flex-direction: column; gap: 14px; }
+    .outcome-item { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: var(--text-2); line-height: 1.8; }
+    .outcome-item::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--charcoal); flex-shrink: 0; margin-top: 10px; }
+    .outcome-item strong { color: var(--text-1); font-weight: 600; }
+    .metric-box { padding: 24px 28px; background: var(--charcoal); border-radius: var(--r); margin-top: 24px; }
+    .metric-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+    .metric-value { font-size: 28px; font-weight: 800; color: var(--white); letter-spacing: -0.03em; line-height: 1.2; }
+    .metric-sub { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 6px; }
+    .evidence-single { display: flex; flex-direction: column; gap: 16px; max-width: 640px; }
+    .evidence-item { display: flex; flex-direction: column; gap: 12px; }
+    .evidence-label { font-size: 13px; font-weight: 700; color: var(--text-1); }
+    .evidence-image { background: var(--bg-card); border: 1.5px solid var(--border); border-radius: var(--r); overflow: hidden; }
+    .evidence-image img { width: 100%; height: auto; display: block; }
+    .evidence-desc { font-size: 14px; color: var(--text-2); line-height: 1.8; }
+    .insight-list { display: flex; flex-direction: column; gap: 16px; }
+    .insight-item { display: flex; gap: 16px; padding: 22px 24px; background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); align-items: flex-start; }
+    .insight-num { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: var(--charcoal-a); font-size: 13px; font-weight: 700; color: var(--charcoal); flex-shrink: 0; }
+    .insight-text { font-size: 15px; color: var(--text-2); line-height: 1.85; padding-top: 4px; }
+    .insight-text strong { color: var(--text-1); font-weight: 600; }
+    .tags-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag { font-size: 12px; font-weight: 600; color: var(--charcoal); background: var(--white); padding: 5px 14px; border-radius: 100px; border: 1px solid var(--border); }
+    footer { padding: 60px 0; border-top: 1px solid var(--border); }
+    .footer-grid { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .footer-name { font-size: 22px; font-weight: 800; color: var(--charcoal); letter-spacing: -0.03em; margin-bottom: 4px; }
+    .footer-sub { font-size: 14px; color: var(--text-3); }
+    .footer-actions { display: flex; gap: 10px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; font-size: 14px; font-weight: 600; border-radius: var(--r-sm); text-decoration: none; letter-spacing: -0.01em; transition: all var(--t) var(--ease); }
+    .btn-dark { background: var(--charcoal); color: var(--white); border: 1.5px solid var(--charcoal); }
+    .btn-dark:hover { background: var(--charcoal-2); transform: translateY(-1px); box-shadow: var(--sh-md); }
+    .btn-outline { background: transparent; color: var(--charcoal); border: 1.5px solid var(--border); }
+    .btn-outline:hover { border-color: var(--charcoal); background: var(--bg-card); transform: translateY(-1px); }
+    .fi { opacity: 0; transform: translateY(20px); transition: opacity 0.55s var(--ease), transform 0.55s var(--ease); }
+    .fi.show { opacity: 1; transform: none; }
+    @media (max-width: 800px) {
+      .case-hero { padding: 56px 0 44px; }
+      .footer-grid { flex-direction: column; align-items: flex-start; }
+      .sec { padding: 44px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header id="hd">
+    <div class="h-inner">
+      <a href="index.html" class="logo">오희은</a>
+      <nav id="nav">
+        <a href="index.html#about">소개</a>
+        <a href="index.html#cases">케이스 스터디</a>
+        <a href="index.html#contact">연락하기</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="메뉴"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="case-hero">
+      <a href="index.html#cases" class="case-hero-nav">
+        <svg viewBox="0 0 14 14" fill="none"><path d="M11.5 7H2.5M5 3.5L1.5 7L5 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        포트폴리오로 돌아가기
+      </a>
+      <h1 class="case-hero-title">장바구니 주문 오류 Fail-soft UX 설계 — 이유를 모른 채 이탈하는 고객을 흐름으로 이어가기</h1>
+      <div class="case-hero-summary">
+        배송 가능일이 다른 상품이 장바구니에 함께 담기면 주문이 차단되는 상황에서, <strong>고객이 이유를 모른 채 이탈하는 CX 문제</strong>를 발견했습니다. 기술적 제약으로 모든 예외를 처리하기 어려운 상황에서, 구현 가능성을 전제로 설계 방향을 전환해 <strong>Fail-soft UX를 직접 기획하고 개발팀과 합의</strong>했습니다. 관련 CS 문의 일 2~3건 → 0건.
+      </div>
+      <div class="case-hero-meta">
+        <span class="meta-chip">#FailSoftUX</span>
+        <span class="meta-chip">#고객여정분석</span>
+        <span class="meta-chip">#MVP기획</span>
+        <span class="meta-chip">#ExceptionDesign</span>
+      </div>
+    </section>
+  </div>
+
+  <section class="sec">
+    <div class="wrap">
+      <h2 class="sec-title">고객은 이유를 몰랐고, 내부에도 기준이 없었습니다</h2>
+      <div class="problem-list fi">
+        <div class="problem-item">
+          <div class="problem-title">문제 1 — 주문 차단 이유가 고객에게 전혀 전달되지 않았음</div>
+          배송 가능일이 다른 상품이 함께 담기면 주문이 차단됩니다. 그런데 <strong>고객에게는 이유가 전달되지 않아 시스템 오류처럼 인식</strong>됐습니다. 주문에 실패한 고객은 재시도 없이 이탈했고, CS 문의로 유입됐습니다.
+        </div>
+        <div class="problem-item">
+          <div class="problem-title">문제 2 — 무료배송 조건 충족을 위해 상품을 더 담다가 이 상황에 걸리는 패턴</div>
+          무료배송 기준(4만원)을 맞추려 여러 상품을 함께 담는 패턴에서 이 오류가 자주 발생했습니다. <strong>장바구니 이탈과 잠재 매출 손실로 직결</strong>되는 CX 문제였습니다. 내부에서도 "상품을 하나씩 빼보세요"라는 안내가 전부였습니다.
+        </div>
+        <div class="problem-item">
+          <div class="problem-title">문제 3 — 외부 API 제약으로 이상적 예외 처리 로직 구현이 불가한 상태</div>
+          외부 시스템(API) 응답 제약으로 인해, 기획 단계에서 의도한 수준의 <strong>세부 예외 처리 로직을 그대로 구현하기 어려운 기술적 한계</strong>가 있었습니다. 접근 방법 자체를 바꿔야 했습니다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-alt">
+    <div class="wrap">
+      <h2 class="sec-title">제약 안에서 실행 가능한 최선안을 찾았습니다</h2>
+      <div class="did-list fi">
+        <div class="did-item">
+          <div class="did-number">1. 구현 가능성을 포함한 재설계</div>
+          <div class="did-title">이상적 로직의 한계를 먼저 확인하고 방향을 바꿨습니다</div>
+          <div class="did-desc">초기에는 모든 실패 조건을 시스템적으로 구분하려 했지만, 구현 가능성과 일정 측면의 현실적 한계를 확인했습니다. <strong>구현 가능성까지 포함해 예외 처리 방식 자체를 다시 설계</strong>해야 한다고 판단하고, 기술 제약을 전제로 한 MVP 방향으로 전환했습니다.</div>
+        </div>
+        <div class="did-item">
+          <div class="did-number">2. API 응답값 기반 MVP 설계</div>
+          <div class="did-title">기술 제약을 전제로 한 실행 가능한 최소 단위 설계</div>
+          <div class="did-desc">API 응답값으로 판단 가능한 조건만을 기준으로 실패 유형을 재정의했습니다. <strong>기술 제약을 전제로 한 실행 가능한 최소 단위(MVP) 해법</strong>으로 방향을 전환해 개발팀과 합의했습니다. 완벽한 처리보다 고객이 상황을 이해하고 흐름을 이어갈 수 있는 것이 우선이라는 원칙을 적용했습니다.</div>
+        </div>
+        <div class="did-item">
+          <div class="did-number">3. Fail-soft UX 설계 및 운영 기준 정비</div>
+          <div class="did-title">오류 상황에서도 고객이 흐름을 이어가도록 설계</div>
+          <div class="did-desc">주문 실패 시 세부 원인을 모두 설명하지 않더라도, <strong>왜 지금 진행할 수 없는지를 이해할 수 있도록 Fail-soft UX를 설계</strong>했습니다. 오류 상황에서 FAQ 및 추가 안내로 자연스럽게 연결되도록 흐름을 보완하고, <strong>운영 대응 기준도 함께 정리해 CS 혼선을 줄였습니다.</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <h2 class="sec-title">고객이 이유를 알게 되면서 문의가 사라졌습니다</h2>
+      <div class="outcome-list fi">
+        <div class="outcome-item">배송 가능일이 다른 상품이 포함된 경우, <strong>주문 차단 사유를 별도 페이지 이동 없이 장바구니 내에서 즉시 안내</strong>하도록 설계</div>
+        <div class="outcome-item">주문 불가 상황에서 고객이 이유를 이해하고 흐름을 이어갈 수 있도록 설계 → <strong>즉각 이탈 방지 및 잠재 매출 손실 구조 해소</strong></div>
+        <div class="outcome-item">오류 인식으로 인한 <strong>고객 문의 유입 구조 해소</strong>, 기술 제약을 고려한 실행 가능한 개선안으로 개발·운영 간 합의</div>
+        <div class="outcome-item">유사한 제약 상황이 발생하더라도 <strong>재사용 가능한 대응 구조</strong> 확보 — Fail-soft 접근법의 내부 기준 정립</div>
+      </div>
+      <div class="metric-box fi">
+        <div class="metric-label">Key Metric</div>
+        <div class="metric-value">일 2~3건 → 0건</div>
+        <div class="metric-sub">주문 오류 CS 문의 완전 해소 · 이탈로 인한 매출 손실 구조 제거</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-alt">
+    <div class="wrap">
+      <h2 class="sec-title">설계 근거</h2>
+      <div class="evidence-single fi">
+        <div class="evidence-item">
+          <div class="evidence-label">Fail-soft UX 설계 흐름 — API 제약 기반 MVP 구조</div>
+          <div class="evidence-image"><img src="img/case4_ev1.png" alt="Fail-soft UX 설계 흐름 문서"></div>
+          <div class="evidence-desc">기술 제약(외부 API 응답 한계)을 전제로 처리 가능한 예외 유형을 재정의하고, 각 상황에서 고객에게 전달할 메시지와 다음 흐름을 설계한 문서입니다. 완벽한 로직 대신 고객이 상황을 이해하고 이어갈 수 있는 최소 단위 UX에 집중했습니다.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <h2 class="sec-title">배운 점</h2>
+      <div class="insight-list fi">
+        <div class="insight-item">
+          <div class="insight-num">1</div>
+          <div class="insight-text"><strong>CX 관점에서 '오류'는 기술 문제가 아닌 커뮤니케이션 문제입니다.</strong> 주문이 차단되는 것 자체보다 고객이 이유를 모른다는 것이 더 큰 문제였습니다. 완벽한 처리보다 이해 가능한 안내가 먼저입니다.</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-num">2</div>
+          <div class="insight-text"><strong>기술 제약은 설계 조건이지 포기의 이유가 아닙니다.</strong> 이상적 로직을 고수하는 대신, 제약 안에서 실행 가능한 MVP를 정의하는 것이 실제 고객 경험을 개선하는 더 빠른 방법이었습니다.</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-num">3</div>
+          <div class="insight-text"><strong>Fail-soft 설계는 운영 기준도 함께 만들어야 완성됩니다.</strong> UX 설계 단계에서 CS 대응 기준까지 함께 정리해 배포했을 때, 운영 혼선 없이 일관된 고객 경험이 유지됐습니다.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-alt">
+    <div class="wrap">
+      <div class="tags-row fi">
+        <span class="tag">#FailSoftUX</span>
+        <span class="tag">#고객여정분석</span>
+        <span class="tag">#MVP기획</span>
+        <span class="tag">#ExceptionDesign</span>
+        <span class="tag">#DevCollaboration</span>
+        <span class="tag">#CX개선</span>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-name">오희은</div>
+          <div class="footer-sub">CX 운영 데이터 분석 · AI 도입 전략</div>
+          <div class="footer-sub" style="margin-top:4px;">gldms1009@naver.com &nbsp;·&nbsp; 010-2357-2674</div>
+        </div>
+        <div class="footer-actions">
+          <a href="index.html" class="btn btn-outline">← 포트폴리오</a>
+          <a href="mailto:gldms1009@naver.com" class="btn btn-dark">이메일 보내기</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const hd = document.getElementById('hd');
+    window.addEventListener('scroll', () => { hd.classList.toggle('on', window.scrollY > 8); }, { passive: true });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.fi').forEach(el => io.observe(el));
+    const navToggle = document.getElementById('navToggle');
+    const navEl = document.getElementById('nav');
+    navToggle.addEventListener('click', () => { navToggle.classList.toggle('open'); navEl.classList.toggle('open'); });
+  </script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case 1. VOC 전수 분류를 통한 CX 구조 문제 발굴 및 개선 실행 | 오희은 포트폴리오</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --white: #FFFFFF; --bg-soft: #F7F7F8; --bg-card: #F3F3F4;
+      --border: #E5E5E6; --text-1: #141416; --text-2: #50505A; --text-3: #909098;
+      --charcoal: #282D32; --charcoal-2: #1A1E21; --charcoal-a: rgba(40,45,50,0.07);
+      --sh-md: 0 4px 20px rgba(0,0,0,0.09); --r: 10px; --r-sm: 6px;
+      --ease: cubic-bezier(.4,0,.2,1); --t: 0.22s;
+    }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--text-1); background: var(--white); -webkit-font-smoothing: antialiased; line-height: 1.7; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 28px; }
+    .hr { width: 100%; height: 1px; background: var(--border); }
+    header { position: sticky; top: 0; z-index: 200; background: rgba(255,255,255,0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid transparent; transition: border-color var(--t) var(--ease); }
+    header.on { border-bottom-color: var(--border); }
+    .h-inner { max-width: 980px; margin: 0 auto; padding: 0 28px; height: 62px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 16px; font-weight: 800; color: var(--charcoal); text-decoration: none; letter-spacing: -0.02em; }
+    nav { display: flex; gap: 30px; }
+    nav a { font-size: 14px; font-weight: 500; color: var(--text-2); text-decoration: none; transition: color var(--t); }
+    nav a:hover { color: var(--charcoal); }
+    .nav-toggle { display: none; width: 36px; height: 36px; border: none; background: none; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
+    .nav-toggle span { display: block; width: 20px; height: 2px; background: var(--charcoal); border-radius: 2px; transition: transform var(--t) var(--ease), opacity var(--t); }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    @media (max-width: 800px) {
+      .nav-toggle { display: flex; }
+      nav { display: none; position: absolute; top: 62px; left: 0; right: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); flex-direction: column; gap: 0; border-bottom: 1px solid var(--border); padding: 8px 0; }
+      nav.open { display: flex; }
+      nav a { padding: 14px 28px; font-size: 15px; }
+    }
+    .case-hero { padding: 72px 0 56px; border-bottom: 1px solid var(--border); }
+    .case-hero-nav { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-2); text-decoration: none; margin-bottom: 32px; transition: color var(--t); }
+    .case-hero-nav:hover { color: var(--charcoal); }
+    .case-hero-nav svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .case-hero-title { font-size: clamp(26px, 4vw, 36px); font-weight: 800; letter-spacing: -0.03em; color: var(--charcoal); line-height: 1.2; margin-bottom: 20px; max-width: 720px; }
+    .case-hero-summary { font-size: 16px; color: var(--text-2); line-height: 1.85; max-width: 720px; padding: 20px 24px; background: var(--bg-soft); border-left: 3px solid var(--charcoal); border-radius: var(--r-sm); margin-bottom: 24px; }
+    .case-hero-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 28px; }
+    .meta-chip { background: var(--charcoal-a); padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 600; color: var(--charcoal); }
+    .sec { padding: 60px 0; }
+    .sec-alt { background: var(--bg-soft); }
+    .sec-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 10px; }
+    .sec-title { font-size: clamp(22px, 3vw, 28px); font-weight: 700; letter-spacing: -0.025em; color: var(--charcoal); line-height: 1.3; margin-bottom: 32px; }
+    .problem-list { display: flex; flex-direction: column; gap: 16px; }
+    .problem-item { padding: 22px 26px; background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); font-size: 15px; color: var(--text-2); line-height: 1.8; }
+    .problem-item strong { color: var(--text-1); font-weight: 600; }
+    .problem-item .problem-title { font-size: 14px; font-weight: 700; color: var(--text-1); margin-bottom: 6px; }
+    .did-list { display: flex; flex-direction: column; gap: 16px; }
+    .did-item { padding: 26px 28px; background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); }
+    .did-number { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--charcoal); margin-bottom: 10px; background: var(--charcoal-a); padding: 3px 12px; border-radius: 6px; }
+    .did-title { font-size: 16px; font-weight: 700; color: var(--text-1); margin-bottom: 8px; letter-spacing: -0.01em; }
+    .did-desc { font-size: 15px; color: var(--text-2); line-height: 1.8; }
+    .did-desc strong { color: var(--text-1); font-weight: 600; }
+    .outcome-list { display: flex; flex-direction: column; gap: 14px; }
+    .outcome-item { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: var(--text-2); line-height: 1.8; }
+    .outcome-item::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--charcoal); flex-shrink: 0; margin-top: 10px; }
+    .outcome-item strong { color: var(--text-1); font-weight: 600; }
+    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 24px; }
+    .metric-box { padding: 24px 28px; background: var(--charcoal); border-radius: var(--r); }
+    .metric-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+    .metric-value { font-size: 28px; font-weight: 800; color: var(--white); letter-spacing: -0.03em; line-height: 1.2; }
+    .metric-sub { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 6px; }
+    .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .evidence-grid.single { grid-template-columns: 1fr; }
+    .evidence-item { display: flex; flex-direction: column; gap: 12px; }
+    .evidence-label { font-size: 13px; font-weight: 700; color: var(--text-1); }
+    .evidence-image { background: var(--bg-card); border: 1.5px solid var(--border); border-radius: var(--r); overflow: hidden; }
+    .evidence-image img { width: 100%; height: auto; display: block; }
+    .evidence-desc { font-size: 14px; color: var(--text-2); line-height: 1.8; }
+    .insight-list { display: flex; flex-direction: column; gap: 16px; }
+    .insight-item { display: flex; gap: 16px; padding: 22px 24px; background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); align-items: flex-start; }
+    .insight-num { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: var(--charcoal-a); font-size: 13px; font-weight: 700; color: var(--charcoal); flex-shrink: 0; }
+    .insight-text { font-size: 15px; color: var(--text-2); line-height: 1.85; padding-top: 4px; }
+    .insight-text strong { color: var(--text-1); font-weight: 600; }
+    .tags-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag { font-size: 12px; font-weight: 600; color: var(--charcoal); background: var(--white); padding: 5px 14px; border-radius: 100px; border: 1px solid var(--border); }
+    footer { padding: 60px 0; border-top: 1px solid var(--border); }
+    .footer-grid { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .footer-name { font-size: 22px; font-weight: 800; color: var(--charcoal); letter-spacing: -0.03em; margin-bottom: 4px; }
+    .footer-sub { font-size: 14px; color: var(--text-3); }
+    .footer-actions { display: flex; gap: 10px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; font-size: 14px; font-weight: 600; border-radius: var(--r-sm); text-decoration: none; letter-spacing: -0.01em; transition: all var(--t) var(--ease); }
+    .btn-dark { background: var(--charcoal); color: var(--white); border: 1.5px solid var(--charcoal); }
+    .btn-dark:hover { background: var(--charcoal-2); transform: translateY(-1px); box-shadow: var(--sh-md); }
+    .btn-outline { background: transparent; color: var(--charcoal); border: 1.5px solid var(--border); }
+    .btn-outline:hover { border-color: var(--charcoal); background: var(--bg-card); transform: translateY(-1px); }
+    .fi { opacity: 0; transform: translateY(20px); transition: opacity 0.55s var(--ease), transform 0.55s var(--ease); }
+    .fi.show { opacity: 1; transform: none; }
+    @media (max-width: 800px) {
+      .case-hero { padding: 56px 0 44px; }
+      .evidence-grid { grid-template-columns: 1fr; }
+      .metric-grid { grid-template-columns: 1fr; }
+      .footer-grid { flex-direction: column; align-items: flex-start; }
+      .sec { padding: 44px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header id="hd">
+    <div class="h-inner">
+      <a href="index.html" class="logo">오희은</a>
+      <nav id="nav">
+        <a href="index.html#about">소개</a>
+        <a href="index.html#cases">케이스 스터디</a>
+        <a href="index.html#contact">연락하기</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="메뉴"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="case-hero">
+      <a href="index.html#cases" class="case-hero-nav">
+        <svg viewBox="0 0 14 14" fill="none"><path d="M11.5 7H2.5M5 3.5L1.5 7L5 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        포트폴리오로 돌아가기
+      </a>
+      <h1 class="case-hero-title">VOC 전수 분류를 통한 CX 구조 문제 발굴 및 개선 실행</h1>
+      <div class="case-hero-summary">
+        같은 CS 문의가 반복될 때 <strong>건별 처리가 아닌 구조적 원인을 찾는 것</strong>이 출발점이었습니다. 두 케이스, 두 가지 결론 — 프로모션 오인 VOC 173건 분류로 82% 동일 원인을 규명했고, 배송 제약 상품이 "품절"로 잘못 표시되는 구조 문제를 발견해 CTO 직접 제안·당일 구현으로 <strong>CS 문의 일 6~10건→0건</strong>을 달성했습니다. 이 해법은 EC팀이 프로모션 안내에도 요청 없이 동일하게 확산 적용하며 <strong>단일 제안이 사내 UI 개선 기준이 됐습니다.</strong>
+      </div>
+      <div class="case-hero-meta">
+        <span class="meta-chip">#VOC데이터분석</span>
+        <span class="meta-chip">#CX개선실행</span>
+        <span class="meta-chip">#구조적원인규명</span>
+        <span class="meta-chip">#개발팀협업</span>
+      </div>
+    </section>
+  </div>
+
+  <section class="sec">
+    <div class="wrap">
+      <h2 class="sec-title">CS 문의는 처리되었지만, 반복은 멈추지 않았습니다</h2>
+      <div class="problem-list fi">
+        <div class="problem-item">
+          <div class="problem-title">문제 1 — 프로모션 오인 VOC가 반복 유입</div>
+          프로모션 조건을 오인한 고객 문의가 지속적으로 유입됐습니다. <strong>건별로 처리하고 있었지만 동일한 유형이 계속 반복</strong>됐고, 구조적 원인을 분석한 적이 없었습니다.
+        </div>
+        <div class="problem-item">
+          <div class="problem-title">문제 2 — 배송 제약 상품이 "품절"로 잘못 표시</div>
+          배송 가능일이 다른 상품이 장바구니에 함께 담기면 결합 제약 상품이 "품절"로 잘못 표시됐습니다. <strong>고객은 이유를 모른 채 장바구니를 이탈</strong>했고, CS로는 일 6~10건의 문의가 반복 유입됐습니다.
+        </div>
+        <div class="problem-item">
+          <div class="problem-title">공통 문제 — CS가 처리하고 끝나는 구조</div>
+          두 케이스 모두 <strong>문의를 처리하고 끝내는 구조</strong>였습니다. 같은 문의가 반복되는 이유를 데이터로 분석하고, 원인을 제거하는 CX 개선으로 연결하는 구조가 없었습니다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-alt">
+    <div class="wrap">
+      <h2 class="sec-title">건별 처리 대신 데이터로 구조를 바꿨습니다</h2>
+      <div class="did-list fi">
+        <div class="did-item">
+          <div class="did-number">1. VOC 전수 분류 — 프로모션 오인 173건</div>
+          <div class="did-title">82% 동일 구조적 원인 규명 → 개발 협의 → 운영 기준 직접 수립</div>
+          <div class="did-desc">프로모션 오인 VOC <strong>173건을 유형별로 전수 분류</strong>했습니다. 분석 결과 <strong>82%가 동일한 구조적 원인</strong>에서 발생하고 있었습니다 — 프로모션 조건 미충족 시 안내 문구가 표시되지 않는 구조였습니다. 이를 데이터로 정리해 이커머스 리드에게 개선안을 제안·협의했습니다. 다만 당시 인입 감소 추세를 감안해 <strong>즉시 개발 대신 운영으로 대응</strong>하는 방향으로 결론이 났고, 초입 고객에게만 선제 AS를 발송하는 운영 기준을 직접 수립해 동일 유형 반복 문의를 줄였습니다. <em>데이터로 원인을 증명하는 것이 팀의 판단 기준을 만들었습니다.</em></div>
+        </div>
+        <div class="did-item">
+          <div class="did-number">2. 배송 VOC 패턴 분석 → CX 구조 재정의</div>
+          <div class="did-title">화요일 배송 상품 "품절" 오표시 → CTO MVP 제안 → 당일 구현 → CS 문의 0건</div>
+          <div class="did-desc">화요일에만 배송되는 상품(연두부 등)이 다른 상품과 함께 장바구니에 담기면 해당 상품이 <strong>"품절"로 잘못 표시</strong>되는 구조적 문제를 VOC 패턴에서 발견했습니다. 고객은 실제로 품절이 아닌데 품절로 오인해 CS로 문의하거나 이탈했고, 일 6~10건의 반복 문의로 이어졌습니다. 이 문제를 데이터 기반으로 재정의하고 <strong>CTO에게 직접 MVP를 제안</strong>했습니다 — 장바구니 내 해당 상품 옆에 "⚠️ 화요일 도착 / 배송 가능일이 제한된 상품이라 나누어 주문이 필요할 수 있어요." subtext를 표시하는 방식. CTO가 즉시 수용하고 <strong>SW개발팀이 당일 구현</strong>, 유사 상품(연두부 85g 등)으로도 확대 적용됐습니다. 관련 CS 문의는 <strong>일 6~10건→0건</strong>으로 완전 해소됐습니다.</div>
+        </div>
+        <div class="did-item">
+          <div class="did-number">3. 개선 사이클 정착</div>
+          <div class="did-title">VOC 리뷰 → 원인 규명 → 개선 실행 → 효과 측정</div>
+          <div class="did-desc">두 케이스를 통해 <strong>VOC 리뷰 → 구조적 원인 규명 → 유관부서 협의 → 개선 실행 → 효과 측정</strong>의 CX 개선 사이클을 정착시켰습니다. 반복되는 CS 문의를 "처리"가 아닌 "차단"하는 구조로 전환했습니다.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <h2 class="sec-title">반복 CS 문의가 구조적으로 사라졌습니다</h2>
+      <div class="outcome-list fi">
+        <div class="outcome-item">프로모션 오인 VOC 173건 분류: <strong>82% 동일 구조적 원인 규명</strong> → 이커머스 리드 협의 → 인입 감소 고려 즉시 개발 대신 <strong>초입 고객 선제 AS 발송 운영 기준 직접 수립</strong> → 동일 유형 반복 문의 감소</div>
+        <div class="outcome-item">화요일 배송 상품 "품절" 오표시 문제: CTO MVP 직접 제안 → 당일 구현 → <strong>관련 CS 문의 일 6~10건→0건 완전 해소</strong></div>
+        <div class="outcome-item">연두부 85g 등 유사 상품으로 확대 적용 — <strong>한 번의 구조 개선이 다수 상품에 재사용</strong></div>
+        <div class="outcome-item"><strong>EC팀이 동일 UI 패턴(장바구니 subtext)을 프로모션 조건 안내에 자체 확대 적용</strong> — 단일 제안이 요청 없이도 사내 UX 개선 기준으로 전파됨</div>
+        <div class="outcome-item">두 케이스 모두 "데이터로 원인을 증명하면 팀의 판단 기준이 바뀐다"는 것을 입증 — <strong>VOC 분석 사이클이 팀 내 정착</strong></div>
+      </div>
+      <div class="metric-grid fi">
+        <div class="metric-box">
+          <div class="metric-label">배송 관련 CS 문의</div>
+          <div class="metric-value">일 6~10건 → 0건</div>
+          <div class="metric-sub">VOC 패턴 분석 → CX 구조 재정의 → CTO 당일 구현</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">프로모션 오인 VOC 분석</div>
+          <div class="metric-value">173건 중 82%</div>
+          <div class="metric-sub">동일 구조적 원인 규명 → 개선 과제 실행 리딩</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-alt">
+    <div class="wrap">
+      <h2 class="sec-title">근거</h2>
+      <div class="evidence-grid fi">
+        <div class="evidence-item">
+          <div class="evidence-label">1. 실제 적용 화면 — 주의상품 subtext + 프로모션 subtext 동시 확인</div>
+          <div class="evidence-image"><img src="img/case1_ev1.png" alt="장바구니 주의상품 subtext 및 프로모션 subtext 적용 화면"></div>
+          <div class="evidence-desc">화요일에만 배송되는 두부 상품에 "⚠️ 화요일에만 도착 가능한 상품이에요. 나누어 주문이 필요할 수 있어요." subtext가 적용된 실제 화면입니다. 아래 짜먹는 멀티비타민에는 "2개 담으면 그 중 1개는 무료"라는 프로모션 subtext가 함께 보입니다 — EC팀이 주의상품 패턴을 보고 프로모션 안내에도 동일하게 자체 적용한 결과입니다. 단일 제안이 사내 UI 기준으로 확산된 것을 한 화면에서 확인할 수 있습니다.</div>
+        </div>
+        <div class="evidence-item">
+          <div class="evidence-label">2. 기술 제약 기반 예외 처리 재정의 및 MVP 설계</div>
+          <div class="evidence-image"><img src="img/case1_ev2.png" alt="기술 제약 기반 MVP 설계 자료"></div>
+          <div class="evidence-desc">모든 실패 조건을 세분화하는 방식 대신, API 응답값으로 실제 판단 가능한 조건만 남겨 구현 가능한 범위 안에서 예외 처리 구조를 재설계했습니다. 기술 제약을 전제로 한 실행 가능한 최소 단위(MVP) 해법으로 개발팀과 합의했습니다.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <h2 class="sec-title">배운 점</h2>
+      <div class="insight-list fi">
+        <div class="insight-item">
+          <div class="insight-num">1</div>
+          <div class="insight-text"><strong>VOC는 처리 대상이 아니라 팀의 판단 기준을 바꾸는 데이터입니다.</strong> 173건 분류로 82%가 같은 원인이라는 것을 증명했을 때, 개발을 진행하지 않더라도 "어떤 고객에게 어떤 AS를 먼저 보낼지"를 결정하는 기준이 생겼습니다.</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-num">2</div>
+          <div class="insight-text"><strong>개발이 안 된다고 해도 운영 기준을 만들 수 있습니다.</strong> 173건 케이스에서 즉시 개발이 불필요하다는 결론이 났을 때, 데이터가 보여준 원인(초입 고객의 조건 인지 부족)을 기반으로 초입 고객 선제 AS 발송 기준을 직접 수립했습니다. 제안이 받아들여지지 않아도 실행은 이어집니다.</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-num">3</div>
+          <div class="insight-text"><strong>CX 개선은 데이터로 근거를 만들어야 빠르게 실행됩니다.</strong> 배송 상품 케이스는 "일 6~10건 반복 문의, 특정 상품 조합 패턴"을 데이터로 정리해 CTO에게 제안했을 때 당일 구현이 됐습니다. 같은 문제를 정성적으로만 전달했다면 결과가 달랐을 것입니다.</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-num">4</div>
+          <div class="insight-text"><strong>좋은 구조는 요청 없이도 다른 곳에 퍼집니다.</strong> 주의상품 subtext 방식을 EC팀이 스스로 프로모션 안내에 적용했습니다. 강요 없이 다른 팀이 따라 한다는 건 그 솔루션이 진짜 문제를 해결했다는 신호입니다.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-alt">
+    <div class="wrap">
+      <div class="tags-row fi">
+        <span class="tag">#VOC데이터분석</span>
+        <span class="tag">#CX개선실행</span>
+        <span class="tag">#구조적원인규명</span>
+        <span class="tag">#개발팀협업</span>
+        <span class="tag">#FailSoftUX</span>
+        <span class="tag">#이커머스CS</span>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-name">오희은</div>
+          <div class="footer-sub">CX 운영 데이터 분석 · AI 도입 전략</div>
+          <div class="footer-sub" style="margin-top:4px;">gldms1009@naver.com &nbsp;·&nbsp; 010-2357-2674</div>
+        </div>
+        <div class="footer-actions">
+          <a href="index.html" class="btn btn-outline">← 포트폴리오</a>
+          <a href="mailto:gldms1009@naver.com" class="btn btn-dark">이메일 보내기</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const hd = document.getElementById('hd');
+    window.addEventListener('scroll', () => { hd.classList.toggle('on', window.scrollY > 8); }, { passive: true });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.fi').forEach(el => io.observe(el));
+    const navToggle = document.getElementById('navToggle');
+    const navEl = document.getElementById('nav');
+    navToggle.addEventListener('click', () => { navToggle.classList.toggle('open'); navEl.classList.toggle('open'); });
+  </script>
+</body>
+</html>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오희은 | CX 운영 데이터 분석 — PTKOREA 지원</title>
+  <meta name="description" content="VOC 데이터 분석 · CX 개선 실행 · AI 도입 전략 · 이커머스 CS 운영 경험 보유">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --white: #FFFFFF; --bg-soft: #F7F7F8; --bg-card: #F3F3F4;
+      --border: #E5E5E6; --border-hover: #282D32;
+      --text-1: #141416; --text-2: #50505A; --text-3: #909098;
+      --charcoal: #282D32; --charcoal-2: #1A1E21; --charcoal-a: rgba(40,45,50,0.07);
+      --sh-sm: 0 1px 4px rgba(0,0,0,0.06); --sh-md: 0 4px 20px rgba(0,0,0,0.09); --sh-lg: 0 12px 40px rgba(0,0,0,0.12);
+      --r: 10px; --r-sm: 6px; --ease: cubic-bezier(.4,0,.2,1); --t: 0.22s;
+    }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--text-1); background: var(--white); -webkit-font-smoothing: antialiased; line-height: 1.7; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 28px; }
+    .hr { width: 100%; height: 1px; background: var(--border); }
+    header { position: sticky; top: 0; z-index: 200; background: rgba(255,255,255,0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid transparent; transition: border-color var(--t) var(--ease); }
+    header.on { border-bottom-color: var(--border); }
+    .h-inner { max-width: 980px; margin: 0 auto; padding: 0 28px; height: 62px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 16px; font-weight: 800; color: var(--charcoal); text-decoration: none; letter-spacing: -0.02em; }
+    nav { display: flex; gap: 30px; }
+    nav a { font-size: 14px; font-weight: 500; color: var(--text-2); text-decoration: none; transition: color var(--t); }
+    nav a:hover { color: var(--charcoal); }
+    .nav-toggle { display: none; width: 36px; height: 36px; border: none; background: none; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
+    .nav-toggle span { display: block; width: 20px; height: 2px; background: var(--charcoal); border-radius: 2px; transition: transform var(--t) var(--ease), opacity var(--t); }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    @media (max-width: 800px) {
+      .nav-toggle { display: flex; }
+      nav { display: none; position: absolute; top: 62px; left: 0; right: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); flex-direction: column; gap: 0; border-bottom: 1px solid var(--border); padding: 8px 0; }
+      nav.open { display: flex; }
+      nav a { padding: 14px 28px; font-size: 15px; }
+      nav a:hover { background: var(--bg-soft); }
+    }
+    .hero { padding: 96px 0 80px; position: relative; overflow: hidden; background-image: radial-gradient(circle, rgba(40,45,50,0.12) 1.5px, transparent 1px); background-size: 28px 28px; background-position: 14px 14px; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 24px; }
+    .hero-eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--charcoal); }
+    .hero-name { font-size: clamp(52px, 7vw, 80px); font-weight: 800; letter-spacing: -0.04em; color: var(--charcoal); line-height: 1.0; margin-bottom: 10px; }
+    .hero-role { font-size: clamp(17px, 2.2vw, 20px); font-weight: 500; color: var(--text-2); letter-spacing: -0.01em; margin-bottom: 36px; }
+    .hero-tagline { position: relative; padding: 0 0 0 22px; margin-bottom: 48px; max-width: 560px; }
+    .hero-tagline::before { content: ''; position: absolute; left: 0; top: 4px; bottom: 4px; width: 3px; border-radius: 2px; background: var(--charcoal); }
+    .hero-tagline p { font-size: clamp(15px, 1.8vw, 17px); color: var(--text-1); line-height: 1.85; }
+    .hero-tagline strong { font-weight: 600; }
+    .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; font-size: 14px; font-weight: 600; border-radius: var(--r-sm); text-decoration: none; letter-spacing: -0.01em; transition: all var(--t) var(--ease); }
+    .btn svg { flex-shrink: 0; }
+    .btn-dark { background: var(--charcoal); color: var(--white); border: 1.5px solid var(--charcoal); }
+    .btn-dark:hover { background: var(--charcoal-2); border-color: var(--charcoal-2); transform: translateY(-1px); box-shadow: var(--sh-md); }
+    .btn-outline { background: transparent; color: var(--charcoal); border: 1.5px solid var(--border); }
+    .btn-outline:hover { border-color: var(--charcoal); background: var(--bg-card); transform: translateY(-1px); }
+    .sec { padding: 76px 0; }
+    .sec-alt { background: var(--bg-soft); }
+    .sec-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 10px; }
+    .sec-title { font-size: clamp(22px, 3vw, 28px); font-weight: 700; letter-spacing: -0.025em; color: var(--charcoal); line-height: 1.3; margin-bottom: 40px; }
+    .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: start; }
+    .about-text { font-size: 16px; color: var(--text-2); line-height: 1.9; }
+    .about-text strong { color: var(--text-1); font-weight: 600; }
+    .about-text p + p { margin-top: 18px; }
+    .about-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+    .chip { font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 100px; background: var(--charcoal-a); color: var(--charcoal); letter-spacing: 0.01em; }
+    .about-sidebar { display: flex; flex-direction: column; gap: 14px; }
+    .sidebar-card { padding: 20px 22px; background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); }
+    .sidebar-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .sidebar-icon { width: 30px; height: 30px; border-radius: var(--r-sm); background: var(--charcoal); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sidebar-card-label { font-size: 13px; font-weight: 700; color: var(--text-1); }
+    .sidebar-card-desc { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+    .metrics-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+    .m-card { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); padding: 28px 18px; text-align: center; transition: box-shadow var(--t) var(--ease), transform var(--t) var(--ease), border-color var(--t); }
+    .m-card:hover { box-shadow: var(--sh-md); transform: translateY(-3px); border-color: var(--charcoal); }
+    .m-number { display: inline-block; font-size: 30px; font-weight: 800; color: var(--charcoal); letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 8px; background: var(--charcoal-a); padding: 4px 14px; border-radius: 8px; }
+    .m-label { font-size: 13px; font-weight: 600; color: var(--text-1); margin-bottom: 6px; }
+    .m-sub { font-size: 11px; color: var(--text-3); line-height: 1.5; }
+    .cases-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 18px; }
+    .c-card { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); padding: 30px; display: flex; flex-direction: column; gap: 14px; text-decoration: none; color: inherit; transition: box-shadow var(--t) var(--ease), transform var(--t) var(--ease), border-color var(--t); }
+    .c-card:hover { box-shadow: var(--sh-md); transform: translateY(-3px); border-color: var(--charcoal); }
+    .c-tags { display: flex; gap: 7px; flex-wrap: wrap; }
+    .c-tag { font-size: 11px; font-weight: 600; color: var(--charcoal); background: var(--charcoal-a); padding: 4px 10px; border-radius: 100px; }
+    .c-title { font-size: 17px; font-weight: 700; color: var(--text-1); letter-spacing: -0.02em; line-height: 1.45; }
+    .c-desc { font-size: 14px; color: var(--text-2); line-height: 1.75; flex: 1; }
+    .c-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--border); margin-top: auto; }
+    .c-metric { display: flex; flex-direction: column; gap: 2px; }
+    .c-metric-val { display: inline-block; font-size: 18px; font-weight: 800; color: var(--charcoal); letter-spacing: -0.02em; background: var(--charcoal-a); padding: 2px 10px; border-radius: 6px; }
+    .c-metric-lab { font-size: 11px; color: var(--text-3); }
+    .c-arrow { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--charcoal); flex-shrink: 0; transition: background var(--t), border-color var(--t), transform var(--t); }
+    .c-card:hover .c-arrow { background: var(--charcoal); border-color: var(--charcoal); color: var(--white); transform: translateX(3px); }
+    .c-card-wide { grid-column: 1 / -1; }
+    /* JD MATCH */
+    .jd-grid { display: flex; flex-direction: column; gap: 16px; }
+    .jd-item { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1.5px solid var(--border); border-radius: var(--r); overflow: hidden; transition: border-color var(--t) var(--ease), box-shadow var(--t) var(--ease); }
+    .jd-item:hover { border-color: var(--border-hover); box-shadow: var(--sh-md); }
+    .jd-left { background: var(--charcoal); color: var(--white); padding: 28px 32px; display: flex; flex-direction: column; gap: 10px; }
+    .jd-num { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+    .jd-req { font-size: 15px; font-weight: 600; line-height: 1.55; color: var(--white); }
+    .jd-keyword-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .jd-kw { font-size: 11px; font-weight: 600; background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.75); padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; }
+    .jd-right { background: var(--white); padding: 28px 32px; display: flex; flex-direction: column; gap: 10px; }
+    .jd-match-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); }
+    .jd-match-title { font-size: 14px; font-weight: 700; color: var(--text-1); line-height: 1.5; }
+    .jd-match-points { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+    .jd-match-point { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--text-2); line-height: 1.6; }
+    .jd-match-point::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--charcoal); flex-shrink: 0; margin-top: 8px; }
+    @media (max-width: 680px) { .jd-item { grid-template-columns: 1fr; } }
+    /* SKILLS */
+    .skills-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .sk-group { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); padding: 22px 24px; }
+    .sk-title { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--charcoal); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .sk-list { display: flex; flex-direction: column; gap: 9px; }
+    .sk-item { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: var(--text-2); }
+    .sk-item::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--charcoal); flex-shrink: 0; }
+    footer { padding: 60px 0; border-top: 1px solid var(--border); }
+    .footer-grid { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .footer-name { font-size: 22px; font-weight: 800; color: var(--charcoal); letter-spacing: -0.03em; margin-bottom: 4px; }
+    .footer-sub { font-size: 14px; color: var(--text-3); }
+    .footer-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .fi { opacity: 0; transform: translateY(20px); transition: opacity 0.55s var(--ease), transform 0.55s var(--ease); }
+    .fi.show { opacity: 1; transform: none; }
+    .fi:nth-child(2) { transition-delay: 0.08s; }
+    .fi:nth-child(3) { transition-delay: 0.16s; }
+    .fi:nth-child(4) { transition-delay: 0.24s; }
+    @media (max-width: 800px) {
+      .about-grid { grid-template-columns: 1fr; gap: 36px; }
+      .metrics-grid { grid-template-columns: repeat(2,1fr); }
+      .cases-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 500px) {
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .hero-cta { flex-direction: column; }
+      .btn { justify-content: center; }
+      .sec { padding: 56px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<header id="hd">
+  <div class="h-inner">
+    <a href="#" class="logo">오희은</a>
+    <nav id="nav">
+      <a href="#about">소개</a>
+      <a href="#cases">케이스 스터디</a>
+      <a href="#jd">요건 매칭</a>
+      <a href="#contact">연락하기</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="메뉴">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      CX 운영 데이터 분석 · AI 도입 전략
+    </div>
+    <h1 class="hero-name">오희은</h1>
+    <p class="hero-role">글로벌 이커머스 플랫폼 CX 운영 데이터 분석 지원</p>
+    <div class="hero-tagline">
+      <p>
+        VOC는 처리 대상이 아니라 <strong>구조를 바꾸는 데이터</strong>입니다.<br>
+        173건 전수 분류로 82% 동일 원인을 규명하고, 생성형 AI로 CS 8단계를 2단계로 바꿔온 사람입니다.<br>
+        <span style="font-size:15px; color:var(--text-3);">VOC 데이터 분석 · CX 개선 실행 · AI 도입 전략 · 이커머스 CS 운영</span>
+      </p>
+    </div>
+    <div class="hero-cta">
+      <a href="#cases" class="btn btn-dark">
+        케이스 스터디 보기
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7H11.5M8 3.5L11.5 7L8 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#jd" class="btn btn-outline">
+        요건 매칭 확인하기
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7H11.5M8 3.5L11.5 7L8 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="hr"></div></div>
+
+<!-- ══ ABOUT ══ -->
+<section class="sec" id="about">
+  <div class="wrap">
+    <p class="sec-eyebrow">About</p>
+    <h2 class="sec-title">VOC 데이터를 CX 구조 문제로 바꾸는 사람,<br>AI를 판단 파트너로 쓰는 사람</h2>
+    <div class="about-grid">
+      <div>
+        <div class="about-text fi">
+          <p>
+            이커머스 CS 현장에서 같은 문의가 반복될 때, 저는 처리 속도보다 <strong>반복의 원인을 먼저 찾았습니다.</strong>
+            프로모션 오인 VOC 173건을 전수 분류해 82%가 동일한 구조적 원인에서 발생한다는 것을 데이터로 증명하고,
+            개발팀과 협의해 CX 개선으로 실행했습니다.
+          </p>
+          <p>
+            AI 도구를 실무에 도입한 것도 같은 이유입니다.
+            더 많이 처리하기 위해서가 아니라, <strong>어떤 업무를 어떤 도구에 위임할지를 구조로 설계하는 것</strong> — 저에게 AI는 효율화 도구가 아니라, 사람이 해야 할 판단을 더 선명하게 만드는 구조의 일부입니다.
+            비개발 직군 중 유일하게 AI 도구 비용을 업무비로 공식 승인받아 <strong>생성형 AI/LLM을 실무 파트너로 직접 운용</strong>해왔습니다.
+          </p>
+          <p>
+            카카오VX에서 400여 개 파트너사 운영 데이터를 기준화했고, 초록마을에서 이커머스 CS 전반을 혼자 설계·운영·개선했습니다.
+            글로벌 이커머스 플랫폼에서도 <strong>데이터를 읽고, 구조를 바꾸고, 실행까지 이어가는 방식</strong>으로 기여할 수 있습니다.
+          </p>
+        </div>
+        <div class="about-chips fi">
+          <span class="chip">VOC 데이터 분석 · CX 개선</span>
+          <span class="chip">이커머스 CS 운영</span>
+          <span class="chip">AI Native 실무 활용</span>
+          <span class="chip">에스컬레이션 대응</span>
+          <span class="chip">데이터 기반 운영 기준 설계</span>
+          <span class="chip">생성형 AI 도입 전략</span>
+        </div>
+      </div>
+      <div class="about-sidebar">
+        <div class="sidebar-card fi">
+          <div class="sidebar-card-top">
+            <div class="sidebar-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="white" stroke-width="1.4"/><path d="M4.5 7h5M7 4.5v5" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <span class="sidebar-card-label">VOC → 구조 문제 재정의</span>
+          </div>
+          <p class="sidebar-card-desc">CS 문의를 건별로 처리하지 않습니다. 반복되는 패턴을 전수 분류해 구조적 원인을 규명하고, CX 개선 과제로 전환합니다.</p>
+        </div>
+        <div class="sidebar-card fi">
+          <div class="sidebar-card-top">
+            <div class="sidebar-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" stroke="white" stroke-width="1.4"/><path d="M5 7h4M7 5v4" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <span class="sidebar-card-label">AI 도입 전략 실무 검증</span>
+          </div>
+          <p class="sidebar-card-desc">기획서에 그치지 않습니다. Claude로 Chrome Extension을 직접 구현해 CS 8단계를 2단계로, AI 전략을 현장에서 바로 검증합니다.</p>
+        </div>
+        <div class="sidebar-card fi">
+          <div class="sidebar-card-top">
+            <div class="sidebar-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11L7 3L11 11" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 8.5h5" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <span class="sidebar-card-label">기준이 없으면 직접 만들기</span>
+          </div>
+          <p class="sidebar-card-desc">CS 판단 가이드, 운영 기준, SLA 처리 기준 — 없는 것을 발견하면 기다리지 않습니다. 데이터로 설계하고, 경영진 보고로 확정합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="hr"></div></div>
+
+<!-- ══ METRICS ══ -->
+<section class="sec sec-alt">
+  <div class="wrap">
+    <p class="sec-eyebrow">Key Results</p>
+    <h2 class="sec-title">숫자로 증명한 성과</h2>
+    <div class="metrics-grid">
+      <div class="m-card fi">
+        <div class="m-number">0건</div>
+        <div class="m-label">CS 문의 완전 해소</div>
+        <div class="m-sub">일 6~10건→0건<br>VOC 분석 → CX 구조 개선</div>
+      </div>
+      <div class="m-card fi">
+        <div class="m-number">173건</div>
+        <div class="m-label">VOC 전수 분류·분석</div>
+        <div class="m-sub">82% 동일 원인 규명<br>CX 개선 과제 실행 리딩</div>
+      </div>
+      <div class="m-card fi">
+        <div class="m-number">8→2단계</div>
+        <div class="m-label">AI 기반 CS 자동화</div>
+        <div class="m-sub">생성형 AI 직접 구현<br>1,151건 단독 처리</div>
+      </div>
+      <div class="m-card fi">
+        <div class="m-number">95%+</div>
+        <div class="m-label">AS 재확인 왕복 제거</div>
+        <div class="m-sub">VOC 데이터 구조화<br>CX 리드타임 단축</div>
+      </div>
+      <div class="m-card fi">
+        <div class="m-number">일 2~3→0</div>
+        <div class="m-label">주문 오류 CS 해소</div>
+        <div class="m-sub">Fail-soft UX 설계<br>기술 제약 → MVP 전환</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="hr"></div></div>
+
+<!-- ══ CASES ══ -->
+<section class="sec" id="cases">
+  <div class="wrap">
+    <p class="sec-eyebrow">Case Study</p>
+    <h2 class="sec-title">실제로 해결한 문제들</h2>
+    <div class="cases-grid">
+
+      <a class="c-card fi" href="case1.html">
+        <div class="c-tags">
+          <span class="c-tag">VOC 데이터 분석</span>
+          <span class="c-tag">CX 개선 실행</span>
+          <span class="c-tag">개발팀 협업</span>
+        </div>
+        <h3 class="c-title">VOC 전수 분류를 통한 CX 구조 문제 발굴 및 개선 실행</h3>
+        <p class="c-desc">프로모션 오인 VOC 173건을 전수 분류해 82%의 동일 구조적 원인을 데이터로 규명하고, 배송 제약 상품 오표시 문제를 VOC 패턴에서 발견해 CTO 재제안·당일 구현까지 연결했습니다. 반복 CS 문의를 건별 처리가 아닌 구조 개선으로 차단한 사례입니다.</p>
+        <div class="c-bottom">
+          <div class="c-metric">
+            <span class="c-metric-val">일 6~10건→0건</span>
+            <span class="c-metric-lab">CS 문의 구조적 차단</span>
+          </div>
+          <div class="c-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7H11.5M8 3.5L11.5 7L8 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </a>
+
+      <a class="c-card fi" href="case2.html">
+        <div class="c-tags">
+          <span class="c-tag">생성형 AI/LLM 활용</span>
+          <span class="c-tag">CS 운영 자동화</span>
+          <span class="c-tag">AI 도입 전략</span>
+        </div>
+        <h3 class="c-title">생성형 AI 활용 CS 운영 자동화 및 AI 도입 전략 수립</h3>
+        <p class="c-desc">Claude로 Chrome Extension을 직접 구현해 CS 반복 프로세스를 8단계에서 2단계로 축소했습니다. 생성형 AI/LLM을 VOC 분류·계약 분석·보고 자동화에 실무 적용하고, AI 도입 비용을 조직에서 공식 승인받은 전략 수립 사례입니다.</p>
+        <div class="c-bottom">
+          <div class="c-metric">
+            <span class="c-metric-val">8→2단계</span>
+            <span class="c-metric-lab">CS 자동화 · 비개발 유일 AI 승인</span>
+          </div>
+          <div class="c-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7H11.5M8 3.5L11.5 7L8 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </a>
+
+      <a class="c-card fi" href="case3.html">
+        <div class="c-tags">
+          <span class="c-tag">VOC 구조화</span>
+          <span class="c-tag">CX 입력 설계</span>
+          <span class="c-tag">데이터 정합성</span>
+          <span class="c-tag">백오피스 CS 운영</span>
+        </div>
+        <h3 class="c-title">고객 의도 기반 환불·교환 입력 구조 재설계 — AS 재확인 왕복 95%+ 제거</h3>
+        <p class="c-desc">자유 텍스트에 묻혀 있던 고객 의도를 필수 선택값으로 구조화해, CS 재확인 왕복을 95% 이상 제거했습니다. 데이터 수집 단계부터 품질을 설계하고, 중복 필드를 활용하는 스펙으로 개발 범위를 최소화해 빠르게 구현한 사례입니다.</p>
+        <div class="c-bottom">
+          <div class="c-metric">
+            <span class="c-metric-val">95%+</span>
+            <span class="c-metric-lab">AS 재확인 왕복 제거 · CX 리드타임 단축</span>
+          </div>
+          <div class="c-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7H11.5M8 3.5L11.5 7L8 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </a>
+
+      <a class="c-card fi" href="case4.html">
+        <div class="c-tags">
+          <span class="c-tag">Fail-soft UX</span>
+          <span class="c-tag">고객여정 분석</span>
+          <span class="c-tag">MVP 기획</span>
+          <span class="c-tag">개발팀 협업</span>
+        </div>
+        <h3 class="c-title">장바구니 주문 오류 Fail-soft UX 설계 — 이유를 모른 채 이탈하는 고객을 흐름으로 이어가기</h3>
+        <p class="c-desc">고객이 이유를 모른 채 이탈하는 주문 오류 CX 문제를 발견하고, 기술 제약(API 응답 한계)을 전제로 구현 가능한 MVP로 방향을 전환해 Fail-soft UX를 직접 기획·개발팀 합의한 사례입니다. CS 문의 일 2~3건 → 0건.</p>
+        <div class="c-bottom">
+          <div class="c-metric">
+            <span class="c-metric-val">일 2~3건→0건</span>
+            <span class="c-metric-lab">주문 오류 CS 문의 완전 해소</span>
+          </div>
+          <div class="c-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7H11.5M8 3.5L11.5 7L8 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="hr"></div></div>
+
+<!-- ══ JD MATCH ══ -->
+<section class="sec sec-alt" id="jd">
+  <div class="wrap">
+    <p class="sec-eyebrow">JD Match</p>
+    <h2 class="sec-title">지원 포지션 요건과의 연결</h2>
+    <div class="jd-grid">
+
+      <div class="jd-item fi">
+        <div class="jd-left">
+          <div class="jd-num">담당업무 01</div>
+          <div class="jd-req">VoC 데이터 수집 및 데이터 분석 → CX 향상 전략 제안</div>
+          <div class="jd-keyword-row">
+            <span class="jd-kw">VOC 분석</span>
+            <span class="jd-kw">데이터 기반</span>
+            <span class="jd-kw">CX 전략</span>
+          </div>
+        </div>
+        <div class="jd-right">
+          <div class="jd-match-label">나의 경험</div>
+          <div class="jd-match-title">173건 전수 분류 → 82% 원인 규명 → 개선 실행</div>
+          <div class="jd-match-points">
+            <div class="jd-match-point">프로모션 오인 VOC 173건을 유형별로 전수 분류해 82%가 동일 구조적 원인임을 데이터로 증명</div>
+            <div class="jd-match-point">원인 규명 → 개발팀 제안·협의 → 검증 로직 구현 → 운영 기준 수립까지 직접 리딩</div>
+            <div class="jd-match-point">배송 VOC 패턴 분석으로 UX 구조 문제 재정의 → 관련 CS 문의 일 6~10건→0건</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="jd-item fi">
+        <div class="jd-left">
+          <div class="jd-num">담당업무 02</div>
+          <div class="jd-req">AI 도입 전략 수립 · 생성형 AI/LLM 활용 운영 자동화</div>
+          <div class="jd-keyword-row">
+            <span class="jd-kw">AI 전략</span>
+            <span class="jd-kw">LLM 활용</span>
+            <span class="jd-kw">자동화</span>
+          </div>
+        </div>
+        <div class="jd-right">
+          <div class="jd-match-label">나의 경험</div>
+          <div class="jd-match-title">Claude로 CS 자동화 직접 구현 + 조직 AI 도입 공식 승인</div>
+          <div class="jd-match-points">
+            <div class="jd-match-point">Claude·GPT·Gemini를 VOC 분류, 계약서 분석, 보고 자동화에 실무 적용</div>
+            <div class="jd-match-point">Chrome Extension 직접 구현 → CS 8단계→2단계, 1,151건 단독 처리</div>
+            <div class="jd-match-point">AI 도입 필요성 직접 제안 → 비개발 직군 유일 업무비 공식 승인</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="jd-item fi">
+        <div class="jd-left">
+          <div class="jd-num">담당업무 03</div>
+          <div class="jd-req">글로벌 이커머스 플랫폼 CS 운영 · 백오피스 운영 · 에스컬레이션 대응</div>
+          <div class="jd-keyword-row">
+            <span class="jd-kw">CS 운영</span>
+            <span class="jd-kw">에스컬레이션</span>
+            <span class="jd-kw">이커머스</span>
+          </div>
+        </div>
+        <div class="jd-right">
+          <div class="jd-match-label">나의 경험</div>
+          <div class="jd-match-title">이커머스 CS 전반 + 400+ 파트너 운영 + 에스컬레이션 구조화</div>
+          <div class="jd-match-points">
+            <div class="jd-match-point">초록마을 이커머스 CS 운영 (취소·반품·재배송·환불·교환 전 처리 흐름)</div>
+            <div class="jd-match-point">카카오VX 골프장 파트너 400+ 곳 어드민 운영 및 CS 판단 기준 체계 수립</div>
+            <div class="jd-match-point">3PL 손실 이슈 범위·리스크 구조화 → CEO/COO 직접 보고 · 에스컬레이션 방지</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="jd-item fi">
+        <div class="jd-left">
+          <div class="jd-num">우대사항</div>
+          <div class="jd-req">시스템적 사고로 CS 비효율 개선 · 데이터 기반 논리적 문제 해결</div>
+          <div class="jd-keyword-row">
+            <span class="jd-kw">시스템 사고</span>
+            <span class="jd-kw">비효율 개선</span>
+            <span class="jd-kw">데이터 논리</span>
+          </div>
+        </div>
+        <div class="jd-right">
+          <div class="jd-match-label">나의 경험</div>
+          <div class="jd-match-title">CS 입력 구조 재설계 → 재확인 왕복 95%+ 제거</div>
+          <div class="jd-match-points">
+            <div class="jd-match-point">자유 텍스트 의존 구조를 필수 선택값으로 재설계 — 추가 확인이 아닌 수집 단계를 구조화</div>
+            <div class="jd-match-point">중복 DB 필드를 활용하는 스펙으로 개발 범위 최소화, 데이터 정합성 향상</div>
+            <div class="jd-match-point">배상 기준 없던 자리에 데이터·계약 분석 기반으로 정산 구조 직접 설계 (월 1,900만 확보)</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="hr"></div></div>
+
+<!-- ══ SKILLS ══ -->
+<section class="sec">
+  <div class="wrap">
+    <p class="sec-eyebrow">Skills &amp; Tools</p>
+    <h2 class="sec-title">역량 및 도구</h2>
+    <div class="skills-grid">
+      <div class="sk-group fi">
+        <div class="sk-title">CS/CX 운영</div>
+        <div class="sk-list">
+          <div class="sk-item">이커머스 CS 운영 (취소·반품·교환·재배송)</div>
+          <div class="sk-item">VOC 전수 분류 · 구조적 원인 규명</div>
+          <div class="sk-item">CX 개선 과제 도출 및 실행 리딩</div>
+          <div class="sk-item">에스컬레이션 이슈 대응 · 선제적 공유</div>
+          <div class="sk-item">B2B 파트너 운영 기준 체계 수립</div>
+        </div>
+      </div>
+      <div class="sk-group fi">
+        <div class="sk-title">AI 전략 · 자동화</div>
+        <div class="sk-list">
+          <div class="sk-item">Claude · ChatGPT · Gemini · NotebookLM</div>
+          <div class="sk-item">Chrome Extension (Claude 활용 직접 구현)</div>
+          <div class="sk-item">Apps Script · VBA (업무 자동화)</div>
+          <div class="sk-item">Zapier (워크플로우 자동화)</div>
+          <div class="sk-item">AI 도입 전략 수립 · 조직 내 제안·승인</div>
+        </div>
+      </div>
+      <div class="sk-group fi">
+        <div class="sk-title">데이터 · 협업 도구</div>
+        <div class="sk-list">
+          <div class="sk-item">Excel 고급 (운영 지표 설계 · 집계)</div>
+          <div class="sk-item">Google Sheets · 데이터 정합성 관리</div>
+          <div class="sk-item">Notion (케이스 문서화 · 운영 기준)</div>
+          <div class="sk-item">Slack (자동화 연동 포함)</div>
+          <div class="sk-item">영어 커뮤니케이션 (Verbal/Written)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER / CONTACT ══ -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-name">오희은</div>
+        <div class="footer-sub">글로벌 이커머스 플랫폼 CX 운영 데이터 분석 지원 — PTKOREA</div>
+        <div class="footer-sub" style="margin-top:4px;">gldms1009@naver.com &nbsp;·&nbsp; 010-2357-2674</div>
+      </div>
+      <div class="footer-actions">
+        <a href="mailto:gldms1009@naver.com" class="btn btn-dark">이메일 보내기</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const hd = document.getElementById('hd');
+  window.addEventListener('scroll', () => { hd.classList.toggle('on', window.scrollY > 8); }, { passive: true });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fi').forEach(el => io.observe(el));
+  const navToggle = document.getElementById('navToggle');
+  const navEl = document.getElementById('nav');
+  navToggle.addEventListener('click', () => { navToggle.classList.toggle('open'); navEl.classList.toggle('open'); });
+  document.querySelectorAll('nav a, .btn[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const href = a.getAttribute('href');
+      if (href.startsWith('#')) { e.preventDefault(); const target = document.querySelector(href); if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' }); navToggle.classList.remove('open'); navEl.classList.remove('open'); }
+    });
+  });
+</script>
+</body>
+</html>
