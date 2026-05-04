@@ -115,7 +115,7 @@
         <svg viewBox="0 0 14 14" fill="none"><path d="M11.5 7H2.5M5 3.5L1.5 7L5 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         포트폴리오로 돌아가기
       </a>
-      <h1 class="case-hero-title">고객 의도 기반 환불·교환 입력 구조 재설계 — AS 재확인 왕복 95%+ 제거</h1>
+      <h1 class="case-hero-title">고객 의도 기반 환불·교환 입력 구조 재설계: AS 재확인 왕복 95%+ 제거</h1>
       <div class="case-hero-summary">
         고객 VOC에 숨어 있던 의도를 <strong>필수 선택값으로 구조화해, AS 재확인 왕복을 95% 이상 없앤</strong> 사례입니다. 데이터 품질은 처리 단계가 아닌 수집 단계에서 결정된다는 관점에서 접근했고, 중복 DB 필드를 활용하는 스펙으로 <strong>개발 범위를 최소화하면서 빠르게 구현</strong>했습니다.
       </div>
@@ -133,15 +133,15 @@
       <h2 class="sec-title">반복 확인으로 고객과 운영 모두 지치고 있었습니다</h2>
       <div class="problem-list fi">
         <div class="problem-item">
-          <div class="problem-title">문제 1 — 고객 의도가 자유 텍스트에 묻혀 있었음</div>
+          <div class="problem-title">문제 1: 고객 의도가 자유 텍스트에 묻혀 있었음</div>
           고객이 환불·교환 의도를 <strong>자유 텍스트로만 남겨 추가 확인이 필요한 구조</strong>였습니다. CS 담당자가 매건 고객에게 재확인해야 했고, 고객은 1:1 문의에 다시 답변해야 했습니다.
         </div>
         <div class="problem-item">
-          <div class="problem-title">문제 2 — 재확인 왕복으로 리드타임 지연·고객 피로 증가</div>
+          <div class="problem-title">문제 2: 재확인 왕복으로 리드타임 지연·고객 피로 증가</div>
           반복 확인으로 <strong>고객 피로도와 운영 리소스가 함께 증가</strong>했습니다. CRM에는 답변 작성일과 사실상 중복되는 확인일시 필드가 기록되어, 의미 없는 데이터만 누적되는 구조였습니다.
         </div>
         <div class="problem-item">
-          <div class="problem-title">문제 3 — CS 처리 속도가 사람의 판단 속도에 좌우됨</div>
+          <div class="problem-title">문제 3: CS 처리 속도가 사람의 판단 속도에 좌우됨</div>
           자유 텍스트에 의존하면 <strong>처리 속도와 정확도가 담당자 개인의 판단에 좌우</strong>됩니다. 담당자마다 해석이 달라지는 품질 편차 문제도 있었습니다.
         </div>
       </div>
@@ -175,9 +175,9 @@
     <div class="wrap">
       <h2 class="sec-title">운영 구조가 변하면서 문제도 사라졌습니다</h2>
       <div class="outcome-list fi">
-        <div class="outcome-item"><strong>AS 문의 재확인 왕복 95%+ 제거</strong> — 직접 스펙 정의 → 개발팀 협의 → 구현 완료</div>
+        <div class="outcome-item"><strong>AS 문의 재확인 왕복 95%+ 제거</strong>. 직접 스펙 정의 → 개발팀 협의 → 구현 완료</div>
         <div class="outcome-item">불필요한 추가 확인 절차 감소 → <strong>환불·교환 처리 리드타임 단축</strong> 및 고객 피로도 감소</div>
-        <div class="outcome-item">불필요한 DB 필드 제거로 <strong>데이터 구조 정합성 향상</strong> — 의미 없는 데이터 누적 구조 해소</div>
+        <div class="outcome-item">불필요한 DB 필드 제거로 <strong>데이터 구조 정합성 향상</strong>. 의미 없는 데이터 누적 구조 해소</div>
         <div class="outcome-item">중복 필드 활용 스펙 설계로 <strong>개발 범위 최소화</strong>, 빠른 구현 및 배포</div>
       </div>
       <div class="metric-box fi">
@@ -193,9 +193,9 @@
       <h2 class="sec-title">3단계의 개선 과정</h2>
       <div class="evidence-grid triple fi">
         <div class="evidence-item">
-          <div class="evidence-label">1. 기존 입력 구조 — 문제 현황</div>
+          <div class="evidence-label">1. 기존 입력 구조: 문제 현황</div>
           <div class="evidence-image"><img src="img/case3_ev1.png" alt="기존 CRM 환불·교환 입력 화면"></div>
-          <div class="evidence-desc">기존 CRM의 환불·교환 입력 화면 — 자유 텍스트 의존 구조와 중복 필드(확인일시)가 있던 상태입니다. 고객 의도를 파악하기 위해 매건 재확인이 필요했습니다.</div>
+          <div class="evidence-desc">기존 CRM의 환불·교환 입력 화면. 자유 텍스트 의존 구조와 중복 필드(확인일시)가 있던 상태입니다. 고객 의도를 파악하기 위해 매건 재확인이 필요했습니다.</div>
         </div>
         <div class="evidence-item">
           <div class="evidence-label">2. 입력 구조 재설계</div>
